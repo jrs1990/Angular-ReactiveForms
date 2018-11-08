@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormGroup, FormControl} from '@angular/forms';
+import {  FormGroup, FormBuilder} from '@angular/forms';
 
 import { Customer } from './customer';
+
 
 @Component({
     selector: 'app-customer',
@@ -9,18 +10,23 @@ import { Customer } from './customer';
     styleUrls: ['./customer.component.css']
 })
 export class CustomerComponent implements OnInit  {
+
+    constructor(private fb: FormBuilder) {}
      
     customer: Customer= new Customer();
 
     customerForm: FormGroup;
 
     ngOnInit(): void {
-        this.customerForm = new FormGroup({
-            firstName: new FormControl(),
-            lastName: new FormControl(),
-            email: new FormControl(),
-            sendCatalog: new FormControl(true)
-        });
+
+        this.customerForm = this.fb.group({
+            firstName: '',
+            lastName: {disabled: true, value:'N/A'},
+            email: '',
+            sendCatalog:false
+
+        })
+
     }
 
     save() {
@@ -32,7 +38,6 @@ export class CustomerComponent implements OnInit  {
         this.customerForm.patchValue({
             firstName: 'Jander',
             lastName: 'Souza  ',
-         
             sendCatalog: false
         });
     }
