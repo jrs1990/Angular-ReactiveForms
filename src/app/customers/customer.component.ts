@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormGroup, FormBuilder} from '@angular/forms';
+import {  FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 import { Customer } from './customer';
 
@@ -20,9 +20,11 @@ export class CustomerComponent implements OnInit  {
     ngOnInit(): void {
 
         this.customerForm = this.fb.group({
-            firstName: '',
-            lastName: {disabled: true, value:'N/A'},
-            email: '',
+            firstName: ['', [Validators.required, Validators.minLength(3)]],
+            lastName: ['', [Validators.required, Validators.minLength(5)]],
+            email: ['',[Validators.required, Validators.email]],
+            phone: '',
+            notification:'email',
             sendCatalog:false
 
         })
@@ -40,5 +42,19 @@ export class CustomerComponent implements OnInit  {
             lastName: 'Souza  ',
             sendCatalog: false
         });
+    }
+
+    setNotification(notifyVia: string):void {
+        const phoneControl = this.customerForm.get('phone');
+
+        if(notifyVia==='text')
+        {
+            phoneControl.setValidators(Validators.required);
+        }
+        else {
+            phoneControl.clearValidators();
+        }
+        console.log(notifyVia);
+        phoneControl.updateValueAndValidity();
     }
  }
